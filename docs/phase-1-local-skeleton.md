@@ -1,0 +1,100 @@
+# Phase 1 — Local Skeleton
+
+**Duration:** 3–4 days  
+**Status:** 🔴 Not started  
+**Prerequisite:** LLM provider and Serper API key decided
+
+---
+
+## Goal
+
+Get all 4 agents talking to each other in a working pipeline — **no real tools, no cloud, no distractions.** Prove the agent graph before touching a single external API.
+
+---
+
+## What to Build
+
+### 1. Project Scaffold
+```
+autonomous-industry-analyst/
+├── agents/
+│   ├── __init__.py
+│   ├── manager.py
+│   ├── researcher.py
+│   ├── analyst.py
+│   └── writer.py
+├── tasks/
+│   ├── __init__.py
+│   ├── research_task.py
+│   ├── analysis_task.py
+│   ├── critique_task.py
+│   └── writing_task.py
+├── tools/
+│   ├── __init__.py
+│   └── stubs.py          ← ALL tools return hardcoded fake data here
+├── crew.py               ← Wires agents + tasks into CrewAI
+├── main.py               ← Entry: python main.py "your query"
+├── .env.example          ← Template for API keys (no real keys)
+├── requirements.txt
+└── docs/                 ← (this folder)
+```
+
+### 2. Agent Definitions (agents/)
+- Define all 4 agents with roles, goals, and backstories
+- Attach stub tools (not real tools)
+- Use `Process.hierarchical` for Manager orchestration
+
+### 3. Tasks (tasks/)
+- `ResearchTask` → assigned to Researcher
+- `AnalysisTask` → assigned to Analyst, reads Researcher output
+- `CritiqueTask` → assigned to Manager (decision gate)
+- `WritingTask` → assigned to Writer
+
+### 4. Critique Logic (simplified for Phase 1)
+- Hardcode `confidence_score = 8.5` in stub output
+- Manager always approves (loop doesn't fire yet)
+- Just verify the flow reaches the Writer
+
+### 5. Logging
+- Print each agent handoff to stdout with a clear prefix:
+```
+[MANAGER]    Delegating research task...
+[RESEARCHER] Starting intelligence gathering...
+[RESEARCHER] → Returning stub data (Phase 1)
+[ANALYST]    Analyzing research output...
+[ANALYST]    → Confidence score: 8.5
+[MANAGER]    Score ≥ 7.0. Approving for writing.
+[WRITER]     Drafting report...
+[WRITER]     → Report saved to ./reports/draft.md
+```
+
+---
+
+## What to Skip
+
+| Item | Reason |
+|---|---|
+| Real web scraping | Too much noise while wiring agents |
+| S3 / AWS | Phase 3 concern |
+| FastAPI server | Phase 3 concern |
+| Actual critique loop | Phase 2 concern |
+| Docker | Phase 3 concern |
+
+---
+
+## Done When
+
+```bash
+python main.py "EV battery supply chain"
+```
+Prints the full agent log above and saves a stub report to `./reports/`.
+
+---
+
+## Recruiter Signal
+
+> You can show the **agent graph and reasoning flow** before any tool is wired up. This demonstrates top-down system design — you architect first, implement second.
+
+---
+
+*Next: [Phase 2 — Intelligence Layer](./phase-2-intelligence-layer.md)*

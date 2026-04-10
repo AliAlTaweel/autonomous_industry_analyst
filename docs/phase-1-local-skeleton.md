@@ -2,7 +2,8 @@
 
 **Duration:** 3–4 days  
 **Status:** 🔴 Not started  
-**Prerequisite:** LLM provider and Serper API key decided
+**LLM (dev):** Ollama + Llama (local) — swap to GPT-4o / Claude via `.env` for prod  
+**Prerequisite:** Ollama installed + a Llama model pulled (`ollama pull llama3.2`)
 
 ---
 
@@ -32,11 +33,34 @@ autonomous-industry-analyst/
 ├── tools/
 │   ├── __init__.py
 │   └── stubs.py          ← ALL tools return hardcoded fake data here
+├── config/
+│   └── llm.py            ← LLM factory (Ollama dev / OpenAI prod)
 ├── crew.py               ← Wires agents + tasks into CrewAI
 ├── main.py               ← Entry: python main.py "your query"
-├── .env.example          ← Template for API keys (no real keys)
+├── .env.example          ← Template: OLLAMA_MODEL, OLLAMA_BASE_URL, LLM_PROVIDER
 ├── requirements.txt
 └── docs/                 ← (this folder)
+```
+
+### LLM Config Pattern (`config/llm.py`)
+```python
+# Reads LLM_PROVIDER from .env
+# "ollama" (default for dev) → talks to local Ollama
+# "openai" or "anthropic"   → uses API key from .env (prod)
+#
+# Agents never import the LLM directly — always go through get_llm()
+```
+
+### `.env.example`
+```bash
+# LLM config
+LLM_PROVIDER=ollama              # ollama | openai | anthropic
+OLLAMA_MODEL=llama3.2            # or llama3.1, mistral, etc.
+OLLAMA_BASE_URL=http://localhost:11434
+
+# Production (leave empty in dev)
+OPENAI_API_KEY=
+ANTHROPIC_API_KEY=
 ```
 
 ### 2. Agent Definitions (agents/)

@@ -16,10 +16,10 @@ This folder contains all planning, architecture, and execution documents for the
 
 Before starting each phase, the following must be resolved:
 
-| Gate | Question | Status |
+| Gate | Question | Decision |
 |---|---|---|
-| 0 → 1 | LLM provider: GPT-4o or Claude 3.5 Sonnet? | ⏳ Pending |
-| 0 → 1 | Serper API key available? | ⏳ Pending |
+| 0 → 1 | LLM provider? | ✅ **Ollama + Llama** (dev) → GPT-4o / Claude (prod) |
+| 0 → 1 | Serper API key available? | ⏳ Pending (Phase 2) |
 | 2 → 3 | Deployment target: App Runner or ECS Fargate? | ⏳ Pending |
 | 3 → 4 | 3 demo query topics confirmed? | ⏳ Pending |
 

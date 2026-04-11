@@ -1,9 +1,9 @@
 # Phase 1 — Local Skeleton
 
 **Duration:** 3–4 days  
-**Status:** 🔴 Not started  
-**LLM (dev):** Ollama + Llama (local) — swap to GPT-4o / Claude via `.env` for prod  
-**Prerequisite:** Ollama installed + a Llama model pulled (`ollama pull llama3.2`)
+**Status:** 🟢 Completed  
+**LLM (dev):** Ollama + Gemma (local) — swap to GPT-4o / Claude via `.env` for prod  
+**Prerequisite:** Ollama installed + a Gemma model pulled (`ollama pull gemma4:26b`)
 
 ---
 
@@ -20,7 +20,6 @@ Get all 4 agents talking to each other in a working pipeline — **no real tools
 autonomous-industry-analyst/
 ├── agents/
 │   ├── __init__.py
-│   ├── manager.py
 │   ├── researcher.py
 │   ├── analyst.py
 │   └── writer.py
@@ -28,7 +27,6 @@ autonomous-industry-analyst/
 │   ├── __init__.py
 │   ├── research_task.py
 │   ├── analysis_task.py
-│   ├── critique_task.py
 │   └── writing_task.py
 ├── tools/
 │   ├── __init__.py
@@ -55,7 +53,7 @@ autonomous-industry-analyst/
 ```bash
 # LLM config
 LLM_PROVIDER=ollama              # ollama | openai | anthropic
-OLLAMA_MODEL=llama3.2            # or llama3.1, mistral, etc.
+OLLAMA_MODEL=gemma4:26b            # or llama3.2, mistral, etc.
 OLLAMA_BASE_URL=http://localhost:11434
 
 # Production (leave empty in dev)
@@ -71,13 +69,11 @@ ANTHROPIC_API_KEY=
 ### 3. Tasks (tasks/)
 - `ResearchTask` → assigned to Researcher
 - `AnalysisTask` → assigned to Analyst, reads Researcher output
-- `CritiqueTask` → assigned to Manager (decision gate)
 - `WritingTask` → assigned to Writer
 
-### 4. Critique Logic (simplified for Phase 1)
-- Hardcode `confidence_score = 8.5` in stub output
-- Manager always approves (loop doesn't fire yet)
-- Just verify the flow reaches the Writer
+### 4. Critique Logic (Phase 1)
+- CrewAI hierarchical process manages the flow.
+- Manager (internal) oversees delegation and task review.
 
 ### 5. Logging
 - Print each agent handoff to stdout with a clear prefix:

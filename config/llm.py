@@ -20,8 +20,9 @@ def get_llm():
     """
     provider = os.getenv("LLM_PROVIDER", "ollama").lower()
 
+
     if provider == "ollama":
-        model = os.getenv("OLLAMA_MODEL", "llama3.2")
+        model = os.getenv("OLLAMA_MODEL", "gemma4:26b")
         base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
         print(f"[LLM] Configured CrewAI LLM for Ollama → model: {model} @ {base_url}")
@@ -31,7 +32,7 @@ def get_llm():
             model=f"ollama/{model}",
             base_url=base_url,
             temperature=0.7,
-        )
+        ) 
 
     elif provider == "openai":
         model = os.getenv("OPENAI_MODEL", "gpt-4o")

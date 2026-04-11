@@ -34,3 +34,7 @@ reports/*.txt
 # Logs
 *.log
 logs/
+
+# Documentation
+PROJECT_MAP.md
+docs/

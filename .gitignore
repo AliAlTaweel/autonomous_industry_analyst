@@ -13,6 +13,9 @@ build/
 venv/
 .venv/
 env/
+venv_inde/
+venv_aia/
+
 
 # Reports (generated - not committed, uploaded to S3)
 reports/*.md

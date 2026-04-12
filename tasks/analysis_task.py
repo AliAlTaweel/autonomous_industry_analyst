@@ -12,6 +12,7 @@ CRITICAL: The confidence_score drives the critique loop.
 
 from crewai import Task
 from crewai.agent import Agent
+from models import AnalysisOutput
 
 
 def create_analysis_task(analyst: Agent, research_task: Task) -> Task:
@@ -19,9 +20,9 @@ def create_analysis_task(analyst: Agent, research_task: Task) -> Task:
         description=(
             "Analyze the research data provided by the Researcher and produce a structured analysis.\n\n"
             "You must:\n"
-            "1. Use financial_parser_tool on any companies mentioned in the research\n"
-            "2. Use trend_correlator_tool with the key events from the research\n"
-            "3. Use risk_scorer_tool on the main research topic\n\n"
+            "1. Use fetch_financials on any companies mentioned in the research\n"
+            "2. Use analyze_trends with the key events from the research\n"
+            "3. Use assess_risks on the main research topic\n\n"
             "Then synthesize your findings into:\n"
             "- FINANCIAL IMPLICATIONS: Revenue impact, capex requirements, valuation effects\n"
             "- RISK MATRIX: Score each dimension (regulatory, market, execution, geopolitical)\n"
@@ -40,4 +41,5 @@ def create_analysis_task(analyst: Agent, research_task: Task) -> Task:
         ),
         agent=analyst,
         context=[research_task],  # Analyst reads Researcher's output
+        output_pydantic=AnalysisOutput,
     )

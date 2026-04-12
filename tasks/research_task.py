@@ -7,6 +7,7 @@ Output: Structured intelligence document with sources, facts, data points, and g
 
 from crewai import Task
 from crewai.agent import Agent
+from models import ResearchOutput
 
 
 def create_research_task(query: str, researcher: Agent) -> Task:
@@ -15,7 +16,7 @@ def create_research_task(query: str, researcher: Agent) -> Task:
             f"Research the following topic thoroughly:\n\n"
             f"TOPIC: {query}\n\n"
             f"Your job is to gather raw intelligence. Use all available tools:\n"
-            f"1. Use serper_search_tool to find recent news (last 90 days)\n"
+            f"1. Use duckduckgo_search_tool to find recent news (last 90 days)\n"
             f"2. Use rss_feed_tool to pull from curated industrial RSS feeds\n"
             f"3. Use web_scraper_tool on the 2-3 most relevant URLs from your search results\n\n"
             f"Structure your output clearly:\n"
@@ -25,11 +26,10 @@ def create_research_task(query: str, researcher: Agent) -> Task:
             f"- GAPS: What you could NOT find that would improve the analysis"
         ),
         expected_output=(
-            "A structured intelligence document containing:\n"
-            "1. SOURCES section (URLs, publication names, dates)\n"
-            "2. KEY FACTS section (5-7 bullet points, data-backed)\n"
-            "3. DATA POINTS section (quantified information only)\n"
-            "4. GAPS section (what data is missing and why it matters)"
+            "A RAW JSON object matching the ResearchOutput schema. "
+            "Do NOT include markdown markers, do NOT include conversational text. "
+            "Focus on high-density data and specific sources."
         ),
         agent=researcher,
+        output_pydantic=ResearchOutput,
     )

@@ -12,7 +12,7 @@ Phase 2: Tools are replaced with real implementations
 
 from crewai import Agent
 from config.llm import get_llm
-from tools.stubs import web_scraper_tool, serper_search_tool, rss_feed_tool
+from tools import web_scraper_tool, duckduckgo_search_tool, rss_feed_tool
 
 
 def create_researcher() -> Agent:
@@ -26,11 +26,10 @@ def create_researcher() -> Agent:
         backstory=(
             "You are a Bloomberg Intelligence analyst with 15 years covering Nordic industrial markets. "
             "You are obsessive about primary sources and allergic to speculation. "
-            "You have broken major stories on EU industrial policy by reading Commission documents "
-            "before the press release hit. Your colleagues call you 'the bloodhound' — "
-            "if the data exists, you will find it."
+            "You only provide raw, structured data. You never provide conversational filler. "
+            "Your results are ALWAYS strictly formatted as JSON so they can be processed by downstream systems."
         ),
-        tools=[web_scraper_tool, serper_search_tool, rss_feed_tool],
+        tools=[web_scraper_tool, duckduckgo_search_tool, rss_feed_tool],
         llm=get_llm(),
         verbose=True,
         allow_delegation=False,

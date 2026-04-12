@@ -13,7 +13,7 @@ Phase 2: Tools replaced with real implementations
 
 from crewai import Agent
 from config.llm import get_llm
-from tools.stubs import financial_parser_tool, trend_correlator_tool, risk_scorer_tool
+from tools import fetch_financials, analyze_trends, assess_risks
 
 
 def create_analyst() -> Agent:
@@ -22,16 +22,15 @@ def create_analyst() -> Agent:
         goal=(
             "Interpret raw research data and surface the strategic implications with precision. "
             "Assign a confidence_score (0.0–10.0) to your analysis. "
-            "A score below 7.0 means the data is insufficient — say so clearly and explain what's missing."
+            "CRITICAL: Use the tools EXACTLY as named: fetch_financials, analyze_trends, and assess_risks."
         ),
         backstory=(
             "You are a former sell-side equity analyst from Goldman Sachs who now leads AI-powered "
-            "research at a European industrial consultancy. You have covered steel, energy, and "
-            "automation sectors for 12 years. You are trained to separate signal from noise in "
-            "noisy industrial datasets, and you have a reputation for being honest when the data "
-            "doesn't support a conclusion. You never overstate confidence."
+            "research at a European industrial consultancy. You are trained to separate signal from noise. "
+            "You are obsessive about precision and only use your official toolkit: fetch_financials, "
+            "analyze_trends, and assess_risks. You never invent tool names."
         ),
-        tools=[financial_parser_tool, trend_correlator_tool, risk_scorer_tool],
+        tools=[fetch_financials, analyze_trends, assess_risks],
         llm=get_llm(),
         verbose=True,
         allow_delegation=False,

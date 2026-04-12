@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # 1. Main FastAPI container identical to what goes to AWS
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      # Inject AWS mock credentials to ensure boto3 points to the localstack environment safely
+      - AWS_ACCESS_KEY_ID=mock
+      - AWS_SECRET_ACCESS_KEY=mock
+      - AWS_DEFAULT_REGION=us-east-1
+      # A toggle flag you can utilize in `tools/s3_tool.py` indicating local environments
+      - USE_LOCALSTACK=true
+      - LOCALSTACK_URL=http://localstack:4566
+      # Standard environment variables
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-mock}
+      - SERPER_API_KEY=${SERPER_API_KEY:-mock}
+      - LLM_PROVIDER=${LLM_PROVIDER:-ollama}
+    volumes:
+      - .:/app
+    depends_on:
+      localstack:
+        condition: service_healthy
+
+  # 2. AWS cloud mock server ensuring you can test S3 tools locally over Mac
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+    environment:
+      # We only need S3 and Secrets Manager for this pipeline
+      - SERVICES=s3,secretsmanager
+      - DEBUG=1
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./.localstack}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    healthcheck:
+      test: ["CMD", "curl", "-s", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5

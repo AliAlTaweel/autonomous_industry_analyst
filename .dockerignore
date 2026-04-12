@@ -1,0 +1,23 @@
+.git
+.gitignore
+.env
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Dependencies
+venv/
+venv_aia/
+.venv/
+env/
+.tox/
+
+# LocalStack DB output directory
+.localstack/
+
+# Build artifacts and logs
+reports/
+logs/
+scratch/
+.DS_Store

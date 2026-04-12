@@ -36,5 +36,5 @@ reports/*.txt
 logs/
 
 # Documentation
-PROJECT_MAP.md
+maps/
 docs/

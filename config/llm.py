@@ -15,51 +15,58 @@ load_dotenv()
 
 def get_llm():
     """
-    Returns a crewai.LLM instance based on LLM_PROVIDER env var.
-    Defaults to Ollama (local) for development.
+    Returns the 'Worker' LLM (Gemma 26B) for Researcher and Analyst agents.
     """
     provider = os.getenv("LLM_PROVIDER", "ollama").lower()
-
 
     if provider == "ollama":
         model = os.getenv("OLLAMA_MODEL", "gemma4:26b")
         base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
-        print(f"[LLM] Configured CrewAI LLM for Ollama → model: {model} @ {base_url}")
+        print(f"[LLM] Configured WORKER LLM for Ollama → {model}")
 
-        # CrewAI LLM uses "ollama/model" format for Ollama
         return LLM(
             model=f"ollama/{model}",
             base_url=base_url,
             temperature=0.7,
             api_key="none",
-            max_tokens=16384, # Increased for longer research summaries
-            timeout=600,      # Give the 26B model 10 minutes to process large context
+            max_tokens=16384,
+            timeout=600,
         ) 
+    
+    # ... other providers ...
+    return _get_cloud_llm(provider)
 
-    elif provider == "openai":
-        model = os.getenv("OPENAI_MODEL", "gpt-4o")
-        print(f"[LLM] Configured CrewAI LLM for OpenAI → model: {model}")
+
+def get_manager_llm():
+    """
+    Returns the 'Manager' LLM (Llama 3.1 8B) for high-speed coordination.
+    """
+    provider = os.getenv("MANAGER_LLM_PROVIDER", "ollama").lower()
+
+    if provider == "ollama":
+        model = os.getenv("MANAGER_OLLAMA_MODEL", "llama3.1:8b")
+        base_url = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+
+        print(f"[LLM] Configured MANAGER LLM for Ollama → {model}")
 
         return LLM(
-            model=model,  # OpenAI is the default provider
-            temperature=0.7,
-            timeout=600,
+            model=f"ollama/{model}",
+            base_url=base_url,
+            temperature=0.3, # Lower temperature for better coordination logic
+            api_key="none",
+            timeout=120,   # Faster decisions don't need 10 mins
         )
 
+    return _get_cloud_llm(provider)
+
+
+def _get_cloud_llm(provider):
+    if provider == "openai":
+        model = os.getenv("OPENAI_MODEL", "gpt-4o")
+        return LLM(model=model, temperature=0.7, timeout=600)
     elif provider == "anthropic":
         model = os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-20241022")
-        print(f"[LLM] Configured CrewAI LLM for Anthropic → model: {model}")
-
-        # For Anthropic, prefix with "anthropic/" if needed, 
-        # but CrewAI LLM usually handles it.
-        return LLM(
-            model=f"anthropic/{model}",
-            temperature=0.7,
-        )
-
-    else:
-        raise ValueError(
-            f"Unknown LLM_PROVIDER: '{provider}'. "
-            "Valid options: ollama | openai | anthropic"
-        )
+        return LLM(model=f"anthropic/{model}", temperature=0.7, timeout=600)
+    
+    raise ValueError(f"Unknown LLM_PROVIDER: '{provider}'")

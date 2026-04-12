@@ -1,5 +1,5 @@
 from crewai import Agent
-from config.llm import get_llm
+from config.llm import get_manager_llm
 from config.logger import logger
 
 def create_manager() -> Agent:
@@ -14,7 +14,7 @@ def create_manager() -> Agent:
             "and delegate specific follow-up research tasks back to the Researcher. "
             "You only approve work for final writing when the analysis is robust and well-supported."
         ),
-        llm=get_llm(),
+        llm=get_manager_llm(),
         verbose=True,
         allow_delegation=True,
     )

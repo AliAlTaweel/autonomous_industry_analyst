@@ -18,11 +18,13 @@ import time
 from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
+from config.logger import logger
 
 load_dotenv()
 
-# Ensure reports directory exists
+# Ensure reports and logs directories exist
 Path("reports").mkdir(exist_ok=True)
+Path("logs").mkdir(exist_ok=True)
 
 
 def main():
@@ -42,16 +44,16 @@ def main():
     start_time = time.time()
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
-    print(f"\n[SYSTEM] Run ID: {run_id}")
-    print(f"[SYSTEM] LLM Provider: {os.getenv('LLM_PROVIDER', 'ollama')}")
-    print(f"[SYSTEM] Phase: 1 (Local Skeleton — Stub Tools)")
+    logger.info(f"\n[SYSTEM] Run ID: {run_id}")
+    logger.info(f"[SYSTEM] LLM Provider: {os.getenv('LLM_PROVIDER', 'ollama')}")
+    logger.info(f"[SYSTEM] Phase: 1 (Local Skeleton — Stub Tools)")
 
     # Import here to allow env vars to load first
     from crew import build_crew
 
     crew = build_crew(query)
 
-    print("\n[SYSTEM] Kicking off crew...\n")
+    logger.info("\n[SYSTEM] Kicking off crew...\n")
 
     result = crew.kickoff()
 
@@ -60,13 +62,13 @@ def main():
     slug = query[:50].lower().replace(" ", "-").replace("/", "-")
     report_path = Path(f"reports/{slug}.md")
 
-    print("\n" + "═" * 60)
-    print("  ✅  RUN COMPLETE")
-    print("═" * 60)
-    print(f"  Run ID    : {run_id}")
-    print(f"  Duration  : {elapsed}s")
-    print(f"  Report    : {report_path}")
-    print("═" * 60 + "\n")
+    logger.info("\n" + "═" * 60)
+    logger.info("  ✅  RUN COMPLETE")
+    logger.info("═" * 60)
+    logger.info(f"  Run ID    : {run_id}")
+    logger.info(f"  Duration  : {elapsed}s")
+    logger.info(f"  Report    : {report_path}")
+    logger.info("═" * 60 + "\n")
 
     return result
 

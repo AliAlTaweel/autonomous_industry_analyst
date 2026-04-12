@@ -32,6 +32,9 @@ def get_llm():
             model=f"ollama/{model}",
             base_url=base_url,
             temperature=0.7,
+            api_key="none",
+            max_tokens=16384, # Increased for longer research summaries
+            timeout=600,      # Give the 26B model 10 minutes to process large context
         ) 
 
     elif provider == "openai":
@@ -41,6 +44,7 @@ def get_llm():
         return LLM(
             model=model,  # OpenAI is the default provider
             temperature=0.7,
+            timeout=600,
         )
 
     elif provider == "anthropic":

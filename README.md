@@ -8,6 +8,8 @@
 ![LangChain](https://img.shields.io/badge/tools-LangChain-green)
 ![AWS](https://img.shields.io/badge/cloud-AWS-orange)
 ![Docker](https://img.shields.io/badge/container-Docker-2496ED)
+![Caching](https://img.shields.io/badge/optimization-DiskCache-blue)
+![Memory](https://img.shields.io/badge/memory-ChromaDB-red)
 
 ---
 
@@ -55,6 +57,11 @@ Manager Agent (CrewAI Hierarchical Process)
     └──▶ Writer Agent
               Tools: Markdown Formatter · S3 Uploader
               Output: Structured .md report → S3 presigned URL
+
+[Optimization Layer]
+    ├──▶ Tool Caching (DiskCache) — Persistent 24h search/scrape cache
+    ├──▶ LLM Caching (SQLite) — Prevents redundant local model compute
+    └──▶ Agent Memory (ChromaDB) — Cross-task context retention
 ```
 
 ---
@@ -75,6 +82,9 @@ Manager Agent (CrewAI Hierarchical Process)
 | Storage | AWS S3 (presigned URLs) |
 | Secrets | AWS Secrets Manager |
 | Observability | AWS CloudWatch |
+| Tool Caching | [DiskCache](http://www.grantjenks.com/docs/diskcache/) |
+| LLM Caching | SQLite (persistent) |
+| Vector DB | [ChromaDB](https://www.trychroma.com/) (Local) |
 
 ---
 
@@ -104,9 +114,13 @@ pip install -r requirements.txt
 
 # 3. Configure environment
 cp .env.example .env
-# → Fill in: OPENAI_API_KEY, SERPER_API_KEY
+# → Fill in: SERPER_API_KEY, TOOL_CACHE_EXPIRE, etc.
 
-# 4. Run
+# 4. Pull local models (if using Ollama)
+ollama pull gemma4:26b
+ollama pull nomic-embed-text  # Required for Memory
+
+# 5. Run
 python main.py "Impact of EU CBAM on Nordic steel manufacturers"
 ```
 

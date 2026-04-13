@@ -163,9 +163,9 @@ autonomous-industry-analyst/
 
 | Phase | Description | Status |
 |---|---|---|
-| [Phase 1](./docs/phase-1-local-skeleton.md) | Local agent scaffold with mocked tools | 🔴 Not started |
-| [Phase 2](./docs/phase-2-intelligence-layer.md) | Real tools + critique loop | 🔴 Not started |
-| [Phase 3](./docs/phase-3-cloud-deployment.md) | Docker + AWS deployment | 🔴 Not started |
+| [Phase 1](./docs/phase-1-local-skeleton.md) | Local agent scaffold with mocked tools | ✅ Completed |
+| [Phase 2](./docs/phase-2-intelligence-layer.md) | Real tools + critique loop | ✅ Completed |
+| [Phase 3](./docs/phase-3-cloud-deployment.md) | Docker + AWS deployment | 🟡 In Progress |
 | [Phase 4](./docs/phase-4-portfolio-polish.md) | Sample reports + CI/CD + README polish | 🔴 Not started |
 
 See [`docs/README.md`](./docs/README.md) for the full planning index.

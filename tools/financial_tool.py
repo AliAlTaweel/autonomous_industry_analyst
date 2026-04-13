@@ -3,8 +3,8 @@ import json
 from crewai.tools import tool
 from .cache import tool_cache
 
-@tool_cache() # Uses TOOL_CACHE_EXPIRE from .env
 @tool
+@tool_cache() # Uses TOOL_CACHE_EXPIRE from .env
 def fetch_financials(company_name: str) -> str:
     """
     Fetches financial data for a given company name or stock ticker using Yahoo Finance.

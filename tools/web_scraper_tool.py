@@ -6,8 +6,8 @@ from .cache import tool_cache
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 
-@tool_cache() # Uses TOOL_CACHE_EXPIRE from .env
 @tool
+@tool_cache() # Uses TOOL_CACHE_EXPIRE from .env
 def web_scraper_tool(url: str) -> str:
     """
     Scrapes the content of a website using Playwright for high-fidelity extraction.

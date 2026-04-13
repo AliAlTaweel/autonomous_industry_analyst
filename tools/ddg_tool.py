@@ -11,8 +11,8 @@ from ddgs import DDGS
 from config.logger import logger
 from .cache import tool_cache
 
-@tool_cache() # Uses TOOL_CACHE_EXPIRE from .env
 @tool
+@tool_cache() # Uses TOOL_CACHE_EXPIRE from .env
 def duckduckgo_search_tool(query: str) -> str:
     """
     Search the web using DuckDuckGo to get the most recent and relevant news.

@@ -2,9 +2,11 @@ import os
 import asyncio
 from typing import Optional
 from crewai.tools import tool
+from .cache import tool_cache
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
 
+@tool_cache() # Uses TOOL_CACHE_EXPIRE from .env
 @tool
 def web_scraper_tool(url: str) -> str:
     """

@@ -9,9 +9,15 @@ Uses the crewai.LLM class for native compatibility with CrewAI 1.x.
 import os
 from dotenv import load_dotenv
 from crewai import LLM
+from langchain.globals import set_llm_cache
+from langchain_community.cache import SQLiteCache
 
 load_dotenv()
 
+# Initialize a global LLM cache to persist local model results across runs
+DEBUG_CACHE_PATH = os.path.join(os.getcwd(), ".cache", "llm_cache.db")
+os.makedirs(os.path.dirname(DEBUG_CACHE_PATH), exist_ok=True)
+set_llm_cache(SQLiteCache(database_path=DEBUG_CACHE_PATH))
 
 def get_llm():
     """

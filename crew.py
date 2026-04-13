@@ -56,6 +56,15 @@ def build_crew(query: str) -> Crew:
     crew = Crew(
         agents=[researcher, analyst, writer],
         tasks=[research_task, analysis_task, writing_task],
+        
+        # Enable Memory: stores short-term, long-term, and entity memory
+        memory=True,
+        embedder={
+            "provider": "ollama",
+            "config": {
+                "model": "nomic-embed-text",
+            }
+        },
 
         # Hierarchical: custom Manager agent orchestrates delegation and review
         process=Process.hierarchical,

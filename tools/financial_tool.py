@@ -1,7 +1,9 @@
 import yfinance as yf
 import json
 from crewai.tools import tool
+from .cache import tool_cache
 
+@tool_cache() # Uses TOOL_CACHE_EXPIRE from .env
 @tool
 def fetch_financials(company_name: str) -> str:
     """
